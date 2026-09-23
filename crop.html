@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Free Image Cropper Online - Crop JPG, PNG & WEBP</title>
+
+<meta name="description" content="Free online image cropper. Crop JPG, PNG and WEBP images easily and download your cropped image.">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #202124;
+}
+
+header {
+    background: #111827;
+    color: white;
+    text-align: center;
+    padding: 35px 15px;
+}
+
+header h1 {
+    margin: 0 0 10px;
+    font-size: 30px;
+}
+
+header p {
+    margin: 0;
+    color: #d1d5db;
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.upload {
+    border: 2px dashed #9ca3af;
+    border-radius: 12px;
+    padding: 35px 15px;
+    text-align: center;
+    cursor: pointer;
+    background: #fafafa;
+}
+
+.upload:hover {
+    background: #f0f4ff;
+}
+
+.upload input {
+    display: none;
+}
+
+#preview {
+    display: none;
+    max-width: 100%;
+    max-height: 500px;
+    margin: 25px auto;
+    border-radius: 10px;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 7px;
+}
+
+button {
+    border: 0;
+    border-radius: 9px;
+    padding: 13px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #2563eb;
+    color: white;
+    margin-top: 20px;
+}
+
+button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+#download {
+    display: none;
+    text-decoration: none;
+}
+
+.info {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f3f4f6;
+    border-radius: 8px;
+}
+
+footer {
+    text-align: center;
+    padding: 30px 15px;
+    color: #6b7280;
+}
+
+@media (max-width: 650px) {
+    .controls {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 26px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Free Image Cropper</h1>
+    <p>Crop your JPG, PNG and WEBP images online for free.</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>Crop Your Image</h2>
+
+        <label class="upload">
+            <input type="file" id="imageInput" accept="image/*">
+            📷<br><br>
+            <strong>Choose an Image</strong>
+            <br>
+            JPG, PNG, WEBP and other common image formats
+        </label>
+
+        <img id="preview">
+
+        <div class="controls">
+
+            <div>
+                <label for="x">Start X</label>
+                <input type="number" id="x" value="0" min="0">
+            </div>
+
+            <div>
+                <label for="y">Start Y</label>
+                <input type="number" id="y" value="0" min="0">
+            </div>
+
+            <div>
+                <label for="cropWidth">Crop Width</label>
+                <input type="number" id="cropWidth" min="1">
+            </div>
+
+            <div>
+                <label for="cropHeight">Crop Height</label>
+                <input type="number" id="cropHeight" min="1">
+            </div>
+
+        </div>
+
+        <button id="cropBtn" disabled>
+            Crop Image
+        </button>
+
+        <a id="download">
+            <button>⬇ Download Cropped Image</button>
+        </a>
+
+        <div id="result" class="info" style="display:none;"></div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Why use our Image Cropper?</h2>
+
+        <p>✓ Free online image cropping</p>
+        <p>✓ Works with JPG, PNG and WEBP</p>
+        <p>✓ No software installation</p>
+        <p>✓ Easy to use</p>
+        <p>✓ Images are processed directly in your browser</p>
+
+    </div>
+
+</div>
+
+<footer>
+    <p>© 2026 Free Image Tools</p>
+    <p>
+        <a href="index.html">Image Tools</a> |
+        <a href="about.html">About</a> |
+        <a href="contact.html">Contact</a> |
+        <a href="privacy.html">Privacy</a>
+    </p>
+</footer>
+
+<script>
+
+const imageInput = document.getElementById("imageInput");
+const preview = document.getElementById("preview");
+
+const xInput = document.getElementById("x");
+const yInput = document.getElementById("y");
+const cropWidth = document.getElementById("cropWidth");
+const cropHeight = document.getElementById("cropHeight");
+
+const cropBtn = document.getElementById("cropBtn");
+const download = document.getElementById("download");
+const result = document.getElementById("result");
+
+let image = new Image();
+
+imageInput.addEventListener("change", function() {
+
+    const file = this.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+
+        image.onload = function() {
+
+            preview.src = e.target.result;
+            preview.style.display = "block";
+
+            cropWidth.value = image.width;
+            cropHeight.value = image.height;
+
+            xInput.value = 0;
+            yInput.value = 0;
+
+            cropBtn.disabled = false;
+
+        };
+
+        image.src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+});
+
+
+cropBtn.addEventListener("click", function() {
+
+    const x = parseInt(xInput.value) || 0;
+    const y = parseInt(yInput.value) || 0;
+
+    const width =
+        parseInt(cropWidth.value) || image.width;
+
+    const height =
+        parseInt(cropHeight.value) || image.height;
+
+    if (x < 0 || y < 0 ||
+        width <= 0 || height <= 0 ||
+        x + width > image.width ||
+        y + height > image.height) {
+
+        alert("Crop area is outside the image.");
+        return;
+    }
+
+    const canvas = document.createElement("canvas");
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(
+        image,
+        x,
+        y,
+        width,
+        height,
+        0,
+        0,
+        width,
+        height
+    );
+
+    canvas.toBlob(function(blob) {
+
+        const url = URL.createObjectURL(blob);
+
+        download.href = url;
+        download.download = "cropped-image.png";
+        download.style.display = "inline-block";
+
+        result.style.display = "block";
+
+        result.innerHTML =
+            "✓ Image cropped successfully!<br><br>" +
+            "New dimensions: <strong>" +
+            width +
+            " × " +
+            height +
+            " px</strong>";
+
+    }, "image/png");
+
+});
+
+</script>
+
+</body>
+</html>
