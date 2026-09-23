@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hackerdon528528-ux.github.io/image-tools/sitemap.xml
