@@ -1,15 +1,451 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Image Tools</title>
-</head>
-<body>
-  <h1>Free Image Tools</h1>
-  <p>Compress, resize and convert your images online.</p>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <h2>Coming Soon</h2>
-  <p>Our free image tools are being prepared.</p>
+<title>Free Image Tools - Compress, Resize & Convert Images</title>
+
+<meta name="description" content="Free online image compressor, resizer and JPG PNG converter. Process your images quickly and download them for free.">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #202124;
+}
+
+header {
+    background: #111827;
+    color: white;
+    text-align: center;
+    padding: 35px 15px;
+}
+
+header h1 {
+    margin: 0 0 10px;
+    font-size: 32px;
+}
+
+header p {
+    margin: 0;
+    color: #d1d5db;
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+.upload {
+    border: 2px dashed #9ca3af;
+    border-radius: 12px;
+    padding: 35px 15px;
+    text-align: center;
+    cursor: pointer;
+    background: #fafafa;
+}
+
+.upload:hover {
+    background: #f0f4ff;
+}
+
+.upload input {
+    display: none;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 7px;
+}
+
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+input[type="range"] {
+    width: 100%;
+}
+
+button {
+    border: 0;
+    border-radius: 9px;
+    padding: 13px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #2563eb;
+    color: white;
+    margin-top: 20px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+#preview {
+    max-width: 100%;
+    max-height: 350px;
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px;
+}
+
+.info {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f3f4f6;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.success {
+    color: #15803d;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    padding: 30px 15px;
+    color: #6b7280;
+}
+
+@media (max-width: 650px) {
+    .controls {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 26px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Free Image Tools</h1>
+    <p>Compress, resize and convert your images online for free.</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>Image Compressor & Resizer</h2>
+
+        <label class="upload">
+            <input type="file" id="imageInput" accept="image/*">
+            📷<br><br>
+            <strong>Choose an Image</strong>
+            <br>
+            JPG, PNG, WEBP and other common image formats
+        </label>
+
+        <div id="fileInfo" class="info" style="display:none;"></div>
+
+        <img id="preview" style="display:none;">
+
+        <div class="controls">
+
+            <div>
+                <label for="width">Width (px)</label>
+                <input type="number" id="width" placeholder="Original width">
+            </div>
+
+            <div>
+                <label for="height">Height (px)</label>
+                <input type="number" id="height" placeholder="Original height">
+            </div>
+
+            <div>
+                <label for="quality">Quality</label>
+                <input type="range" id="quality" min="10" max="100" value="80">
+                <span id="qualityValue">80%</span>
+            </div>
+
+            <div>
+                <label for="format">Output Format</label>
+                <select id="format">
+                    <option value="image/jpeg">JPG</option>
+                    <option value="image/png">PNG</option>
+                    <option value="image/webp">WEBP</option>
+                </select>
+            </div>
+
+        </div>
+
+        <button id="processBtn" disabled>
+            Process Image
+        </button>
+
+        <div id="resultInfo" class="info" style="display:none;"></div>
+
+        <a id="downloadLink" style="display:none; text-decoration:none;">
+            <button>⬇ Download Image</button>
+        </a>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Why use our Image Tool?</h2>
+
+        <p>✓ Free to use</p>
+        <p>✓ No software installation</p>
+        <p>✓ Resize images easily</p>
+        <p>✓ Compress images</p>
+        <p>✓ Convert JPG, PNG and WEBP</p>
+        <p>✓ Your image is processed directly in your browser</p>
+
+    </div>
+
+</div>
+
+<footer>
+    <p>© 2026 Free Image Tools</p>
+</footer>
+
+
+<script>
+
+const imageInput = document.getElementById("imageInput");
+const preview = document.getElementById("preview");
+const widthInput = document.getElementById("width");
+const heightInput = document.getElementById("height");
+const qualityInput = document.getElementById("quality");
+const qualityValue = document.getElementById("qualityValue");
+const formatInput = document.getElementById("format");
+const processBtn = document.getElementById("processBtn");
+const downloadLink = document.getElementById("downloadLink");
+const fileInfo = document.getElementById("fileInfo");
+const resultInfo = document.getElementById("resultInfo");
+
+let originalImage = null;
+let originalFile = null;
+
+qualityInput.addEventListener("input", function() {
+    qualityValue.textContent = this.value + "%";
+});
+
+
+imageInput.addEventListener("change", function() {
+
+    const file = this.files[0];
+
+    if (!file) return;
+
+    originalFile = file;
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+
+        preview.src = e.target.result;
+        preview.style.display = "block";
+
+        const img = new Image();
+
+        img.onload = function() {
+
+            originalImage = img;
+
+            widthInput.value = img.width;
+            heightInput.value = img.height;
+
+            fileInfo.style.display = "block";
+
+            fileInfo.innerHTML =
+                "Original size: <strong>" +
+                formatBytes(file.size) +
+                "</strong><br>" +
+                "Dimensions: <strong>" +
+                img.width +
+                " × " +
+                img.height +
+                " px</strong>";
+
+            processBtn.disabled = false;
+        };
+
+        img.src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+});
+
+
+widthInput.addEventListener("input", function() {
+
+    if (!originalImage) return;
+
+    const ratio = originalImage.height / originalImage.width;
+
+    if (this.value) {
+        heightInput.value =
+            Math.round(this.value * ratio);
+    }
+});
+
+
+heightInput.addEventListener("input", function() {
+
+    if (!originalImage) return;
+
+    const ratio = originalImage.width / originalImage.height;
+
+    if (this.value) {
+        widthInput.value =
+            Math.round(this.value * ratio);
+    }
+});
+
+
+processBtn.addEventListener("click", function() {
+
+    if (!originalImage) return;
+
+    const width =
+        parseInt(widthInput.value) || originalImage.width;
+
+    const height =
+        parseInt(heightInput.value) || originalImage.height;
+
+    const quality =
+        parseInt(qualityInput.value) / 100;
+
+    const format =
+        formatInput.value;
+
+    const canvas =
+        document.createElement("canvas");
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx =
+        canvas.getContext("2d");
+
+    if (format === "image/jpeg") {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
+    }
+
+    ctx.drawImage(
+        originalImage,
+        0,
+        0,
+        width,
+        height
+    );
+
+    canvas.toBlob(function(blob) {
+
+        if (!blob) {
+            alert("Could not process image.");
+            return;
+        }
+
+        const url =
+            URL.createObjectURL(blob);
+
+        downloadLink.href = url;
+
+        let extension = "jpg";
+
+        if (format === "image/png") {
+            extension = "png";
+        }
+
+        if (format === "image/webp") {
+            extension = "webp";
+        }
+
+        downloadLink.download =
+            "processed-image." + extension;
+
+        downloadLink.style.display = "block";
+
+        resultInfo.style.display = "block";
+
+        resultInfo.innerHTML =
+            "<span class='success'>✓ Image processed successfully!</span><br><br>" +
+            "Original size: <strong>" +
+            formatBytes(originalFile.size) +
+            "</strong><br>" +
+            "New size: <strong>" +
+            formatBytes(blob.size) +
+            "</strong><br>" +
+            "New dimensions: <strong>" +
+            width +
+            " × " +
+            height +
+            " px</strong>";
+
+    }, format, quality);
+
+});
+
+
+function formatBytes(bytes) {
+
+    if (bytes === 0) return "0 Bytes";
+
+    const sizes =
+        ["Bytes", "KB", "MB", "GB"];
+
+    const i =
+        Math.floor(
+            Math.log(bytes) / Math.log(1024)
+        );
+
+    return (
+        parseFloat(
+            (bytes / Math.pow(1024, i)).toFixed(2)
+        ) +
+        " " +
+        sizes[i]
+    );
+}
+
+</script>
+
 </body>
 </html>
